@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechGeek - Home</title>
-    <link rel="stylesheet" href="css/style.css"> </head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <body>
 
     <header>
         <h1>TechGeek</h1>
-        <p>Your ultimate destination for the latest in technology, gadgets, and expert reviews.</p>
+        <p>Your ultimate destination for the latest technology, hardware reviews, and essential how-to guides.</p>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/news">News</a></li>
-                <li><a href="/reviews">Reviews</a></li>
+                <li><a href="/news">News & Updates</a></li>
+                <li><a href="/reviews">In-Depth Reviews</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
@@ -22,26 +23,32 @@
 
     <main>
         <section>
-            <h2>Latest News</h2>
-            <p>Catch up on the biggest announcements from the tech world this week, including new processors and mobile OS updates.</p>
-            <a href="/news">Read all news articles...</a>
+            <h2>🚀 Get Started: Quick Tech Tips</h2>
+            <p>New to PC building or upgrading? Here are three essential things you should know today:</p>
+            <ul>
+                <li><strong>Check BIOS Updates:</strong> Before installing a new CPU, always check your motherboard's vendor site for the latest BIOS.</li>
+                <li><strong>Cloud Backup Strategy:</strong> Use a 3-2-1 backup strategy (3 copies of data, 2 different media, 1 offsite).</li>
+                <li><strong>Monitor Refresh Rate:</strong> Ensure your operating system display settings match your monitor's highest refresh rate (e.g., 144Hz) to enjoy smooth performance.</li>
+            </ul>
+            <a href="/news">Read more essential tech guides...</a>
         </section>
 
         <section>
-            <h2>Featured Review: The New X-Phone Pro</h2>
-            <p>We take a deep dive into the most anticipated phone of the year. The camera is revolutionary, but is the price justified?</p>
-            <a href="/reviews">Read the full review...</a>
+            <h2>🔍 Featured Review: NVMe SSD Speed Test</h2>
+            <p>We benchmark the top five fastest NVMe Solid State Drives on the market. See which drive offers the best read/write speeds for your budget.</p>
+            <p>Our featured winner achieved speeds of over 7000 MB/s in sequential reads.</p>
+            <a href="/reviews">See the full comparative review...</a>
         </section>
 
         <section>
-            <h2>Join the Community</h2>
-            <p>Discuss the latest trends, ask for troubleshooting advice, and connect with fellow tech enthusiasts on our forums.</p>
-            <a href="#">Visit our Forum (Coming Soon)</a>
-        </section>
-
-        <section>
-            <h2>About TechGeek</h2>
-            <p>We are a community of passionate writers and experts dedicated to bringing you unbiased and insightful tech content since 2025.</p>
+            <h2>Community Poll: What's Your Next Upgrade?</h2>
+            <p>Help us decide what hardware to focus on next!</p>
+            <form>
+                <input type="radio" id="gpu" name="upgrade" value="GPU"><label for="gpu"> Graphics Card (GPU)</label><br>
+                <input type="radio" id="ram" name="upgrade" value="RAM"><label for="ram"> RAM Modules (Memory)</label><br>
+                <input type="radio" id="cpu" name="upgrade" value="CPU"><label for="cpu"> Central Processor (CPU)</label><br>
+                <button type="submit">Vote</button>
+            </form>
         </section>
     </main>
 
