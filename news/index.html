@@ -51,5 +51,39 @@
         <p>&copy; 2025 TechGeek. All rights reserved.</p>
     </footer>
 
+    <button id="accessibility-btn" aria-label="Toggle High Contrast Mode">
+        ♿ High Contrast
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.getElementById('accessibility-btn');
+            const body = document.body;
+            const contrastKey = 'techgeek-high-contrast';
+
+            // Function to apply or remove contrast class
+            const toggleContrast = (enable) => {
+                if (enable) {
+                    body.classList.add('high-contrast');
+                    localStorage.setItem(contrastKey, 'true');
+                } else {
+                    body.classList.remove('high-contrast');
+                    localStorage.removeItem(contrastKey);
+                }
+            };
+
+            // Check localStorage on load to maintain user's setting
+            if (localStorage.getItem(contrastKey) === 'true') {
+                toggleContrast(true);
+            }
+
+            // Button click handler
+            button.addEventListener('click', () => {
+                const isEnabled = body.classList.contains('high-contrast');
+                toggleContrast(!isEnabled);
+            });
+        });
+    </script>
+
 </body>
 </html>
