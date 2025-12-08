@@ -18,6 +18,7 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--background-color);
+    transition: background-color 0.3s, color 0.3s; /* Smooth color transitions */
 }
 
 /* --- Typography --- */
@@ -96,4 +97,68 @@ footer {
     padding: 1rem 0;
     margin-top: 2rem;
     border-top: 1px solid var(--primary-color);
+}
+
+/* --- Accessibility Button Styling --- */
+#accessibility-btn {
+    position: fixed; /* Keep it in place when scrolling */
+    right: 20px;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%);
+    z-index: 1000; /* Ensure it stays on top of content */
+    
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#accessibility-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* --- High Contrast Mode Definitions --- */
+/* This class will be added to the <body> tag by the JavaScript */
+.high-contrast {
+    /* Set extremely contrasting colors */
+    --background-color: #ffffff !important; /* White background */
+    --text-color: #000000 !important; /* Black text */
+    --primary-color: #0000ff !important; /* Pure blue links/highlights */
+    --header-bg: #cccccc !important; 
+    --card-bg: #f0f0f0 !important;
+}
+
+/* Adjust text and link colors specifically for high-contrast visibility */
+.high-contrast body {
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.high-contrast h1, .high-contrast h2 {
+    color: var(--primary-color) !important;
+}
+
+.high-contrast a {
+    color: var(--primary-color) !important;
+    font-weight: bold; /* Increase text weight for better visibility */
+    border-bottom: 2px solid var(--primary-color); /* Add underline for visibility */
+}
+
+/* Ensure form elements contrast well */
+.high-contrast input, .high-contrast textarea {
+    border: 2px solid var(--text-color) !important; 
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+}
+
+.high-contrast button[type="submit"] {
+    background-color: var(--primary-color) !important;
+    color: var(--background-color) !important;
+    font-weight: bold;
 }
