@@ -21,7 +21,7 @@
     <main class="staff-main">
         <section style="grid-column: 1 / -1; background-color: #444444;">
             <h2>🔑 Staff Portal: Live Community Poll Results</h2>
-            <p>Results are fetched live from the external Google Sheet data source (via SheetDB). **Refresh the page to update.**</p>
+            <p>Results are fetched live from the external Google Sheet data source. **Refresh the page to update.**</p>
             <hr style="margin: 15px 0;">
             
             <h3 id="total-votes">Total Votes: Loading...</h3>
@@ -36,7 +36,7 @@
         <section style="grid-column: 1 / -1; background-color: #555555;">
             <h2>Quick Links</h2>
             <ul>
-                <li><a href="https://sheetdb.io/app/apis/tbavlx57c6jrr" target="_blank">Go to SheetDB Dashboard</a></li>
+                <li><a href="https://sheetdb.io/login" target="_blank">Go to SheetDB Dashboard</a></li>
                 <li><a href="/">Return to Public Homepage</a></li>
             </ul>
         </section>
@@ -65,7 +65,7 @@
                     options.forEach(opt => voteCounts[opt] = 0);
                     
                     data.forEach(row => {
-                        // Assuming the column name in your sheet is 'upgrade'
+                        // ** CRITICAL: Assumes column header in Google Sheet is named 'upgrade' **
                         const vote = row.upgrade; 
                         if (voteCounts.hasOwnProperty(vote)) {
                             voteCounts[vote]++;
