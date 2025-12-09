@@ -67,7 +67,6 @@
                     
                     data.forEach(row => {
                         // ** CRITICAL: Assumes column header in Google Sheet is named 'upgrade' **
-                        // If this column is not present or is empty, the count will be wrong.
                         const vote = row.upgrade; 
                         if (voteCounts.hasOwnProperty(vote)) {
                             voteCounts[vote]++;
