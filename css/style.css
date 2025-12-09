@@ -99,7 +99,7 @@ footer {
     border-top: 1px solid var(--primary-color);
 }
 
-/* --- Form Styling (Contact Page) --- */
+/* --- Form Styling --- */
 input[type="text"], input[type="email"], textarea {
     padding: 10px; 
     border: 1px solid #555; 
@@ -127,24 +127,23 @@ button[type="submit"]:hover {
 /* --- Accessibility Button & Panel Styling --- */
 #accessibility-btn {
     position: fixed;
-    right: 20px;
+    right: 15px; 
     top: 50%; 
     transform: translateY(-50%);
     z-index: 1000;
-    
-    /* Style the Icon Button */
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 50%; /* Makes it a circle */
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem; /* Makes the wheelchair icon large */
-    line-height: 50px;
+    border-radius: 50%;
+    width: 45px; 
+    height: 45px;
+    font-size: 1.5rem; 
+    line-height: 45px;
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
     transition: background-color 0.3s, transform 0.3s;
+    padding: 0;
 }
 
 #accessibility-btn:hover {
@@ -155,7 +154,7 @@ button[type="submit"]:hover {
 /* Accessibility Options Panel */
 #accessibility-panel {
     position: fixed;
-    right: 80px; /* Positions it next to the button */
+    right: 70px; 
     top: 50%;
     transform: translateY(-50%);
     z-index: 999;
@@ -164,15 +163,22 @@ button[type="submit"]:hover {
     border: 2px solid var(--primary-color);
     border-radius: 8px;
     padding: 15px;
-    width: 220px;
+    width: 250px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    display: none; /* Starts hidden */
+    
+    display: flex; 
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(20px);
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
 }
 
 #accessibility-panel.active {
-    display: flex; /* Show when active */
+    opacity: 1; 
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
 }
 
 .accessibility-option {
@@ -183,26 +189,56 @@ button[type="submit"]:hover {
     background-color: var(--card-bg);
     color: var(--text-color);
     text-align: center;
-    transition: background-color 0.2s, color 0.2s;
+    font-weight: bold;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .accessibility-option:hover {
+    background-color: #444;
+    border-color: var(--primary-color);
+}
+
+.accessibility-option.active {
     background-color: var(--primary-color);
     color: white;
 }
 
+/* --- Font Size Classes (Applied to <body>) --- */
+.font-small p, .font-small li {
+    font-size: 0.9em;
+}
+
+.font-large p, .font-large li {
+    font-size: 1.15em;
+}
+
+.font-huge p, .font-huge li {
+    font-size: 1.3em;
+}
+
+/* Ensure headings scale appropriately in large/huge mode */
+.font-large h1 { font-size: 2.75rem; }
+.font-large h2 { font-size: 1.8rem; }
+
+.font-huge h1 { font-size: 3rem; }
+.font-huge h2 { font-size: 2rem; }
+
+/* --- Spacing/Readability Class (Applied to <body>) --- */
+.readable-spacing p, .readable-spacing li {
+    line-height: 1.8; 
+    letter-spacing: 0.05em; 
+    word-spacing: 0.1em; 
+}
+
 /* --- High Contrast Mode Definitions --- */
-/* This class will be added to the <body> tag by the JavaScript */
 .high-contrast {
-    /* Set extremely contrasting colors */
-    --background-color: #ffffff !important; /* White background */
-    --text-color: #000000 !important; /* Black text */
-    --primary-color: #0000ff !important; /* Pure blue links/highlights */
+    --background-color: #ffffff !important; 
+    --text-color: #000000 !important; 
+    --primary-color: #0000ff !important; 
     --header-bg: #cccccc !important; 
     --card-bg: #f0f0f0 !important;
 }
 
-/* Adjust text and link colors specifically for high-contrast visibility */
 .high-contrast body {
     color: var(--text-color);
     background-color: var(--background-color);
@@ -214,11 +250,10 @@ button[type="submit"]:hover {
 
 .high-contrast a {
     color: var(--primary-color) !important;
-    font-weight: bold; /* Increase text weight for better visibility */
-    border-bottom: 2px solid var(--primary-color); /* Add underline for visibility */
+    font-weight: bold; 
+    border-bottom: 2px solid var(--primary-color); 
 }
 
-/* Ensure form elements contrast well */
 .high-contrast input, .high-contrast textarea {
     border: 2px solid var(--text-color) !important; 
     background-color: var(--background-color) !important;
@@ -229,4 +264,45 @@ button[type="submit"]:hover {
     background-color: var(--primary-color) !important;
     color: var(--background-color) !important;
     font-weight: bold;
+}
+
+.high-contrast .accessibility-option {
+    border-color: var(--text-color) !important;
+}
+.high-contrast .accessibility-option.active {
+    background-color: var(--primary-color) !important;
+    color: var(--background-color) !important;
+}
+
+/* Staff Portal Specific Styles (Live Poll Tracker) */
+.staff-main {
+    padding: 4rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+.vote-bar {
+    background-color: #444;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    height: 35px;
+    overflow: hidden;
+    position: relative;
+}
+.vote-fill {
+    height: 100%;
+    background-color: #00b347; /* Green for success */
+    transition: width 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 3px #000;
+    min-width: 40px; 
+}
+.loading-message {
+    color: #ccc;
+    padding: 20px;
+    text-align: center;
 }
