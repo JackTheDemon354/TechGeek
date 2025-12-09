@@ -23,29 +23,25 @@
 
     <main>
         <section>
-            <h2>Review: 'ErgoType' Mechanical Keyboard</h2>
-            <p><strong>Rating: 4.5/5 Stars</strong></p>
-            <p>The ErgoType boasts silent linear switches and a split ergonomic design. While the wrist rests are plush, the key remapping software can be cumbersome for beginners.</p>
-            <h3>Our Test Criteria:</h3>
+            <h2>🏆 Review of the Month: The Apex 5000 GPU</h2>
+            <p>The Apex 5000 is a game-changer, setting new benchmarks for rasterization and ray-tracing performance. We put it through 12 rigorous tests, finding exceptional thermal management and power efficiency.</p>
+            <h3>Key Stats:</h3>
             <ul>
-                <li><strong>Build Quality:</strong> Solid aluminum chassis (5/5)</li>
-                <li><strong>Typing Experience:</strong> Excellent key travel and quiet actuation (4/5)</li>
-                <li><strong>Software/Features:</strong> Complex initial setup (3/5)</li>
+                <li><strong>Average Frame Rate:</strong> 120 FPS at 4K Ultra Settings</li>
+                <li><strong>Power Draw:</strong> 350W (Max)</li>
+                <li><strong>Final Rating:</strong> 9.5/10 (Editor's Choice)</li>
             </ul>
-            <a href="#">Read the full breakdown and see the tear-down photos...</a>
         </section>
 
         <section>
-            <h2>Review: 'NovaSight' 4K Monitor</h2>
-            <p><strong>Rating: 3.8/5 Stars</strong></p>
-            <p>A beautiful display for content creators on a budget. The color accuracy is fantastic right out of the box, but HDR performance is noticeably weak in dark scenes.</p>
-            <h3>How We Tested:</h3>
-            <ol>
-                <li>Measured DCI-P3 coverage using a SpyderX calibrator.</li>
-                <li>Tested input lag across three different gaming consoles.</li>
-                <li>Evaluated panel uniformity against a pure white background.</li>
-            </ol>
-            <a href="#">View the calibration report and full image gallery...</a>
+            <h2>Budget Pick: Ergonomic Wireless Mouse</h2>
+            <p>Not everyone needs 16,000 DPI. For everyday use and long work sessions, this budget wireless mouse provides superb comfort, customizable buttons, and a battery life that lasts for months. A fantastic value for under $30.</p>
+            <a href="#">See our full budget peripherals roundup...</a>
+        </section>
+
+        <section>
+            <h2>Software Spotlight: Project Management Tool X</h2>
+            <p>Moving beyond hardware, we review the new Project Management Tool X. Its Kanban boards and integrated Git support make it a powerful choice for development teams, though its steep learning curve might deter small businesses.</p>
         </section>
     </main>
 
@@ -53,18 +49,56 @@
         <p>&copy; 2025 TechGeek. All rights reserved.</p>
     </footer>
 
-    <button id="accessibility-btn" aria-label="Toggle High Contrast Mode">
-        ♿ High Contrast
+    <button id="accessibility-btn" aria-label="Accessibility Options">
+        ♿
     </button>
 
+    <div id="accessibility-panel">
+        <h3>Accessibility Options</h3>
+
+        <h4>Text Size</h4>
+        <div style="display: flex; gap: 5px;">
+            <div class="accessibility-option" id="font-small">A-</div>
+            <div class="accessibility-option active" id="font-normal">A</div>
+            <div class="accessibility-option" id="font-large">A+</div>
+            <div class="accessibility-option" id="font-huge">A++</div>
+        </div>
+
+        <h4>Readability</h4>
+        <div class="accessibility-option" id="toggle-spacing">
+            Toggle Text Spacing
+        </div>
+        
+        <h4>Visuals</h4>
+        <div class="accessibility-option" id="toggle-contrast">
+            Toggle High Contrast Mode
+        </div>
+
+        <div class="accessibility-option" id="panel-close" style="margin-top: 10px;">
+            Close Panel
+        </div>
+    </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const button = document.getElementById('accessibility-btn');
+            const btn = document.getElementById('accessibility-btn');
+            const panel = document.getElementById('accessibility-panel');
             const body = document.body;
+            
+            const contrastToggle = document.getElementById('toggle-contrast');
             const contrastKey = 'techgeek-high-contrast';
+            const spacingToggle = document.getElementById('toggle-spacing');
+            const spacingKey = 'techgeek-spacing';
+            const fontButtons = document.querySelectorAll('#font-small, #font-normal, #font-large, #font-huge');
+            const fontKey = 'techgeek-font-size';
+            const fontClasses = {
+                'font-small': 'font-small',
+                'font-normal': '',
+                'font-large': 'font-large',
+                'font-huge': 'font-huge'
+            };
 
-            // Function to apply or remove contrast class
-            const toggleContrast = (enable) => {
+            const applyContrast = (enable) => {
                 if (enable) {
                     body.classList.add('high-contrast');
                     localStorage.setItem(contrastKey, 'true');
@@ -72,17 +106,70 @@
                     body.classList.remove('high-contrast');
                     localStorage.removeItem(contrastKey);
                 }
+                contrastToggle.classList.toggle('active', enable);
             };
 
-            // Check localStorage on load to maintain user's setting
-            if (localStorage.getItem(contrastKey) === 'true') {
-                toggleContrast(true);
-            }
+            const applySpacing = (enable) => {
+                if (enable) {
+                    body.classList.add('readable-spacing');
+                    localStorage.setItem(spacingKey, 'true');
+                } else {
+                    body.classList.remove('readable-spacing');
+                    localStorage.removeItem(spacingKey);
+                }
+                spacingToggle.classList.toggle('active', enable);
+            };
+            
+            const applyFont = (sizeClass) => {
+                Object.values(fontClasses).forEach(c => {
+                    if (c) body.classList.remove(c);
+                });
+                if (sizeClass) {
+                    body.classList.add(sizeClass);
+                }
+                if (sizeClass === '') {
+                    localStorage.removeItem(fontKey);
+                } else {
+                    localStorage.setItem(fontKey, sizeClass);
+                }
+                fontButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                document.getElementById(Object.keys(fontClasses).find(key => fontClasses[key] === sizeClass) || 'font-normal').classList.add('active');
+            };
 
-            // Button click handler
-            button.addEventListener('click', () => {
-                const isEnabled = body.classList.contains('high-contrast');
-                toggleContrast(!isEnabled);
+
+            applyContrast(localStorage.getItem(contrastKey) === 'true');
+            applySpacing(localStorage.getItem(spacingKey) === 'true');
+            const savedFont = localStorage.getItem(fontKey) || fontClasses['font-normal'];
+            applyFont(savedFont);
+
+            const togglePanel = () => {
+                panel.classList.toggle('active');
+                btn.style.backgroundColor = panel.classList.contains('active') ? '#e60000' : 'var(--primary-color)';
+            };
+
+            btn.addEventListener('click', togglePanel);
+            document.getElementById('panel-close').addEventListener('click', togglePanel);
+            
+            document.addEventListener('click', (event) => {
+                if (!panel.contains(event.target) && !btn.contains(event.target) && panel.classList.contains('active')) {
+                    togglePanel();
+                }
+            });
+
+            contrastToggle.addEventListener('click', () => {
+                applyContrast(!body.classList.contains('high-contrast'));
+            });
+
+            spacingToggle.addEventListener('click', () => {
+                applySpacing(!body.classList.contains('readable-spacing'));
+            });
+
+            fontButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    applyFont(fontClasses[button.id]);
+                });
             });
         });
     </script>
