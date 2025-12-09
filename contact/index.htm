@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechGeek - Contact Us</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Contact TechGeek</h1>
+        <p>We'd love to hear from you! Send us your tips, collaboration requests, or questions.</p>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/news">News & Updates</a></li>
+                <li><a href="/reviews">In-Depth Reviews</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section style="grid-column: 1 / -1;">
+            <h2>Send Us a Message</h2>
+            <p>Use the form below for all general inquiries, feedback, and collaboration proposals.</p>
+
+            <form action="https://formspree.io/f/xyzrdnqg" method="POST" style="display: grid; gap: 15px; max-width: 600px; margin: 20px 0;">
+                
+                <label for="name" style="font-weight: bold;">Your Name:</label>
+                <input type="text" name="name" id="name" required 
+                        style="padding: 10px; border: 1px solid #555; background-color: #3a3a3a; color: var(--text-color); border-radius: 4px;">
+
+                <label for="email" style="font-weight: bold;">Your Email:</label>
+                <input type="email" name="_replyto" id="email" required 
+                        style="padding: 10px; border: 1px solid #555; background-color: #3a3a3a; color: var(--text-color); border-radius: 4px;">
+
+                <label for="subject" style="font-weight: bold;">Subject:</label>
+                <input type="text" name="subject" id="subject" 
+                        style="padding: 10px; border: 1px solid #555; background-color: #3a3a3a; color: var(--text-color); border-radius: 4px;">
+
+                <label for="message" style="font-weight: bold;">Message:</label>
+                <textarea name="message" id="message" rows="6" required 
+                            style="padding: 10px; border: 1px solid #555; background-color: #3a3a3a; color: var(--text-color); border-radius: 4px; resize: vertical;"></textarea>
+                
+                <button type="submit" 
+                        style="padding: 12px 20px; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: background-color 0.3s;">
+                    Send Message
+                </button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Submission Guidelines</h2>
+            <p>Have a product you want us to review or an article idea? Please follow these guidelines:</p>
+            <ul>
+                <li>For reviews, include a direct link to the product specifications.</li>
+                <li>For article submissions, send a brief abstract (max 150 words) first.</li>
+                <li>We do not accept paid placements in our editorial content.</li>
+            </ul>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2025 TechGeek. All rights reserved.</p>
+    </footer>
+
+    <button id="accessibility-btn" aria-label="Accessibility Options">
+        ♿
+    </button>
+
+    <div id="accessibility-panel">
+        <h3>Accessibility Options</h3>
+
+        <h4>Text Size</h4>
+        <div style="display: flex; gap: 5px;">
+            <div class="accessibility-option" id="font-small">A-</div>
+            <div class="accessibility-option active" id="font-normal">A</div>
+            <div class="accessibility-option" id="font-large">A+</div>
+            <div class="accessibility-option" id="font-huge">A++</div>
+        </div>
+
+        <h4>Readability</h4>
+        <div class="accessibility-option" id="toggle-spacing">
+            Toggle Text Spacing
+        </div>
+        
+        <h4>Visuals</h4>
+        <div class="accessibility-option" id="toggle-contrast">
+            Toggle High Contrast Mode
+        </div>
+
+        <div class="accessibility-option" id="panel-close" style="margin-top: 10px;">
+            Close Panel
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('accessibility-btn');
+            const panel = document.getElementById('accessibility-panel');
+            const body = document.body;
+            
+            const contrastToggle = document.getElementById('toggle-contrast');
+            const contrastKey = 'techgeek-high-contrast';
+            const spacingToggle = document.getElementById('toggle-spacing');
+            const spacingKey = 'techgeek-spacing';
+            const fontButtons = document.querySelectorAll('#font-small, #font-normal, #font-large, #font-huge');
+            const fontKey = 'techgeek-font-size';
+            const fontClasses = {
+                'font-small': 'font-small',
+                'font-normal': '',
+                'font-large': 'font-large',
+                'font-huge': 'font-huge'
+            };
+
+            const applyContrast = (enable) => {
+                if (enable) {
+                    body.classList.add('high-contrast');
+                    localStorage.setItem(contrastKey, 'true');
+                } else {
+                    body.classList.remove('high-contrast');
+                    localStorage.removeItem(contrastKey);
+                }
+                contrastToggle.classList.toggle('active', enable);
+            };
+
+            const applySpacing = (enable) => {
+                if (enable) {
+                    body.classList.add('readable-spacing');
+                    localStorage.setItem(spacingKey, 'true');
+                } else {
+                    body.classList.remove('readable-spacing');
+                    localStorage.removeItem(spacingKey);
+                }
+                spacingToggle.classList.toggle('active', enable);
+            };
+            
+            const applyFont = (sizeClass) => {
+                Object.values(fontClasses).forEach(c => {
+                    if (c) body.classList.remove(c);
+                });
+                if (sizeClass) {
+                    body.classList.add(sizeClass);
+                }
+                if (sizeClass === '') {
+                    localStorage.removeItem(fontKey);
+                } else {
+                    localStorage.setItem(fontKey, sizeClass);
+                }
+                fontButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                document.getElementById(Object.keys(fontClasses).find(key => fontClasses[key] === sizeClass) || 'font-normal').classList.add('active');
+            };
+
+
+            applyContrast(localStorage.getItem(contrastKey) === 'true');
+            applySpacing(localStorage.getItem(spacingKey) === 'true');
+            const savedFont = localStorage.getItem(fontKey) || fontClasses['font-normal'];
+            applyFont(savedFont);
+
+            const togglePanel = () => {
+                panel.classList.toggle('active');
+                btn.style.backgroundColor = panel.classList.contains('active') ? '#e60000' : 'var(--primary-color)';
+            };
+
+            btn.addEventListener('click', togglePanel);
+            document.getElementById('panel-close').addEventListener('click', togglePanel);
+            
+            document.addEventListener('click', (event) => {
+                if (!panel.contains(event.target) && !btn.contains(event.target) && panel.classList.contains('active')) {
+                    togglePanel();
+                }
+            });
+
+            contrastToggle.addEventListener('click', () => {
+                applyContrast(!body.classList.contains('high-contrast'));
+            });
+
+            spacingToggle.addEventListener('click', () => {
+                applySpacing(!body.classList.contains('readable-spacing'));
+            });
+
+            fontButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    applyFont(fontClasses[button.id]);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
