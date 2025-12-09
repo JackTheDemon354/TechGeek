@@ -51,18 +51,56 @@
         <p>&copy; 2025 TechGeek. All rights reserved.</p>
     </footer>
 
-    <button id="accessibility-btn" aria-label="Toggle High Contrast Mode">
-        ♿ High Contrast
+    <button id="accessibility-btn" aria-label="Accessibility Options">
+        ♿
     </button>
 
+    <div id="accessibility-panel">
+        <h3>Accessibility Options</h3>
+
+        <h4>Text Size</h4>
+        <div style="display: flex; gap: 5px;">
+            <div class="accessibility-option" id="font-small">A-</div>
+            <div class="accessibility-option active" id="font-normal">A</div>
+            <div class="accessibility-option" id="font-large">A+</div>
+            <div class="accessibility-option" id="font-huge">A++</div>
+        </div>
+
+        <h4>Readability</h4>
+        <div class="accessibility-option" id="toggle-spacing">
+            Toggle Text Spacing
+        </div>
+        
+        <h4>Visuals</h4>
+        <div class="accessibility-option" id="toggle-contrast">
+            Toggle High Contrast Mode
+        </div>
+
+        <div class="accessibility-option" id="panel-close" style="margin-top: 10px;">
+            Close Panel
+        </div>
+    </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const button = document.getElementById('accessibility-btn');
+            const btn = document.getElementById('accessibility-btn');
+            const panel = document.getElementById('accessibility-panel');
             const body = document.body;
+            
+            const contrastToggle = document.getElementById('toggle-contrast');
             const contrastKey = 'techgeek-high-contrast';
+            const spacingToggle = document.getElementById('toggle-spacing');
+            const spacingKey = 'techgeek-spacing';
+            const fontButtons = document.querySelectorAll('#font-small, #font-normal, #font-large, #font-huge');
+            const fontKey = 'techgeek-font-size';
+            const fontClasses = {
+                'font-small': 'font-small',
+                'font-normal': '',
+                'font-large': 'font-large',
+                'font-huge': 'font-huge'
+            };
 
-            // Function to apply or remove contrast class
-            const toggleContrast = (enable) => {
+            const applyContrast = (enable) => {
                 if (enable) {
                     body.classList.add('high-contrast');
                     localStorage.setItem(contrastKey, 'true');
@@ -70,17 +108,70 @@
                     body.classList.remove('high-contrast');
                     localStorage.removeItem(contrastKey);
                 }
+                contrastToggle.classList.toggle('active', enable);
             };
 
-            // Check localStorage on load to maintain user's setting
-            if (localStorage.getItem(contrastKey) === 'true') {
-                toggleContrast(true);
-            }
+            const applySpacing = (enable) => {
+                if (enable) {
+                    body.classList.add('readable-spacing');
+                    localStorage.setItem(spacingKey, 'true');
+                } else {
+                    body.classList.remove('readable-spacing');
+                    localStorage.removeItem(spacingKey);
+                }
+                spacingToggle.classList.toggle('active', enable);
+            };
+            
+            const applyFont = (sizeClass) => {
+                Object.values(fontClasses).forEach(c => {
+                    if (c) body.classList.remove(c);
+                });
+                if (sizeClass) {
+                    body.classList.add(sizeClass);
+                }
+                if (sizeClass === '') {
+                    localStorage.removeItem(fontKey);
+                } else {
+                    localStorage.setItem(fontKey, sizeClass);
+                }
+                fontButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                document.getElementById(Object.keys(fontClasses).find(key => fontClasses[key] === sizeClass) || 'font-normal').classList.add('active');
+            };
 
-            // Button click handler
-            button.addEventListener('click', () => {
-                const isEnabled = body.classList.contains('high-contrast');
-                toggleContrast(!isEnabled);
+
+            applyContrast(localStorage.getItem(contrastKey) === 'true');
+            applySpacing(localStorage.getItem(spacingKey) === 'true');
+            const savedFont = localStorage.getItem(fontKey) || fontClasses['font-normal'];
+            applyFont(savedFont);
+
+            const togglePanel = () => {
+                panel.classList.toggle('active');
+                btn.style.backgroundColor = panel.classList.contains('active') ? '#e60000' : 'var(--primary-color)';
+            };
+
+            btn.addEventListener('click', togglePanel);
+            document.getElementById('panel-close').addEventListener('click', togglePanel);
+            
+            document.addEventListener('click', (event) => {
+                if (!panel.contains(event.target) && !btn.contains(event.target) && panel.classList.contains('active')) {
+                    togglePanel();
+                }
+            });
+
+            contrastToggle.addEventListener('click', () => {
+                applyContrast(!body.classList.contains('high-contrast'));
+            });
+
+            spacingToggle.addEventListener('click', () => {
+                applySpacing(!body.classList.contains('readable-spacing'));
+            });
+
+            fontButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    applyFont(fontClasses[button.id]);
+                });
             });
         });
     </script>
