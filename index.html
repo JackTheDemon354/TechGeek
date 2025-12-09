@@ -43,12 +43,27 @@
         <section>
             <h2>Community Poll: What's Your Next Upgrade?</h2>
             <p>Help us decide what hardware to focus on next!</p>
-            <form>
-                <input type="radio" id="gpu" name="upgrade" value="GPU"><label for="gpu"> Graphics Card (GPU)</label><br>
-                <input type="radio" id="ram" name="upgrade" value="RAM"><label for="ram"> RAM Modules (Memory)</label><br>
-                <input type="radio" id="cpu" name="upgrade" value="CPU"><label for="cpu"> Central Processor (CPU)</label><br>
-                <button type="submit">Vote</button>
+            
+            <form id="poll-form" 
+                  action="https://docs.google.com/forms/d/e/1FAIpQLScRc6vXO3kHO5QlsofPSaOYic4E0HV2WOZ5GL8t761Am6F60Q/formResponse" 
+                  method="POST" 
+                  target="hidden-iframe"
+                  onsubmit="showConfirmation();"
+                  >
+
+                <input type="radio" id="gpu" name="entry.1743046736" value="GPU" required><label for="gpu"> Graphics Card (GPU)</label><br>
+                <input type="radio" id="ram" name="entry.1743046736" value="RAM" required><label for="ram"> RAM Modules (Memory)</label><br>
+                <input type="radio" id="cpu" name="entry.1743046736" value="CPU" required><label for="cpu"> Central Processor (CPU)</label><br>
+                
+                <button type="submit" id="vote-btn">Vote</button>
+                
+                <p id="vote-message" style="margin-top: 10px; color: #00b347; font-weight: bold; display: none;">
+                    ✅ Thank you! Your vote has been recorded.
+                </p>
+                <p style="margin-top: 10px; font-style: italic;">(Poll votes are saved seamlessly.)</p>
             </form>
+            
+            <iframe name="hidden-iframe" id="hidden-iframe" style="display: none;"></iframe>
         </section>
     </main>
 
@@ -56,18 +71,82 @@
         <p>&copy; 2025 TechGeek. All rights reserved.</p>
     </footer>
 
-    <button id="accessibility-btn" aria-label="Toggle High Contrast Mode">
-        ♿ High Contrast
+    <button id="accessibility-btn" aria-label="Accessibility Options">
+        ♿
     </button>
 
+    <div id="accessibility-panel">
+        <h3>Accessibility Options</h3>
+
+        <h4>Text Size</h4>
+        <div style="display: flex; gap: 5px;">
+            <div class="accessibility-option" id="font-small">A-</div>
+            <div class="accessibility-option active" id="font-normal">A</div>
+            <div class="accessibility-option" id="font-large">A+</div>
+            <div class="accessibility-option" id="font-huge">A++</div>
+        </div>
+
+        <h4>Readability</h4>
+        <div class="accessibility-option" id="toggle-spacing">
+            Toggle Text Spacing
+        </div>
+        
+        <h4>Visuals</h4>
+        <div class="accessibility-option" id="toggle-contrast">
+            Toggle High Contrast Mode
+        </div>
+
+        <div class="accessibility-option" id="panel-close" style="margin-top: 10px;">
+            Close Panel
+        </div>
+    </div>
+    
     <script>
+        // --- POLL SUBMISSION CONFIRMATION SCRIPT ---
+        function showConfirmation() {
+            // Hide the vote button 
+            document.getElementById('vote-btn').style.display = 'none';
+            
+            // Show the confirmation message
+            document.getElementById('vote-message').style.display = 'block';
+
+            // Disable the radio buttons to prevent accidental re-voting
+            document.querySelectorAll('#poll-form input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+            
+            // Set the form to prevent future submissions (until the page is refreshed)
+            document.getElementById('poll-form').onsubmit = (e) => {
+                e.preventDefault();
+            };
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
-            const button = document.getElementById('accessibility-btn');
+            const btn = document.getElementById('accessibility-btn');
+            const panel = document.getElementById('accessibility-panel');
             const body = document.body;
+            
+            // Contrast Elements
+            const contrastToggle = document.getElementById('toggle-contrast');
             const contrastKey = 'techgeek-high-contrast';
 
-            // Function to apply or remove contrast class
-            const toggleContrast = (enable) => {
+            // Spacing Elements
+            const spacingToggle = document.getElementById('toggle-spacing');
+            const spacingKey = 'techgeek-spacing';
+
+            // Font Elements
+            const fontButtons = document.querySelectorAll('#font-small, #font-normal, #font-large, #font-huge');
+            const fontKey = 'techgeek-font-size';
+            const fontClasses = {
+                'font-small': 'font-small',
+                'font-normal': '',
+                'font-large': 'font-large',
+                'font-huge': 'font-huge'
+            };
+
+            // --- Primary Logic Functions (Accessibility) ---
+
+            const applyContrast = (enable) => {
                 if (enable) {
                     body.classList.add('high-contrast');
                     localStorage.setItem(contrastKey, 'true');
@@ -75,17 +154,74 @@
                     body.classList.remove('high-contrast');
                     localStorage.removeItem(contrastKey);
                 }
+                contrastToggle.classList.toggle('active', enable);
             };
 
-            // Check localStorage on load to maintain user's setting
-            if (localStorage.getItem(contrastKey) === 'true') {
-                toggleContrast(true);
-            }
+            const applySpacing = (enable) => {
+                if (enable) {
+                    body.classList.add('readable-spacing');
+                    localStorage.setItem(spacingKey, 'true');
+                } else {
+                    body.classList.remove('readable-spacing');
+                    localStorage.removeItem(spacingKey);
+                }
+                spacingToggle.classList.toggle('active', enable);
+            };
+            
+            const applyFont = (sizeClass) => {
+                Object.values(fontClasses).forEach(c => {
+                    if (c) body.classList.remove(c);
+                });
+                if (sizeClass) {
+                    body.classList.add(sizeClass);
+                }
+                if (sizeClass === '') {
+                    localStorage.removeItem(fontKey);
+                } else {
+                    localStorage.setItem(fontKey, sizeClass);
+                }
+                fontButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                document.getElementById(Object.keys(fontClasses).find(key => fontClasses[key] === sizeClass) || 'font-normal').classList.add('active');
+            };
 
-            // Button click handler
-            button.addEventListener('click', () => {
-                const isEnabled = body.classList.contains('high-contrast');
-                toggleContrast(!isEnabled);
+
+            // --- Initialization (Load saved state) ---
+            applyContrast(localStorage.getItem(contrastKey) === 'true');
+            applySpacing(localStorage.getItem(spacingKey) === 'true');
+            const savedFont = localStorage.getItem(fontKey) || fontClasses['font-normal'];
+            applyFont(savedFont);
+
+
+            // --- Event Listeners (Accessibility) ---
+            
+            const togglePanel = () => {
+                panel.classList.toggle('active');
+                btn.style.backgroundColor = panel.classList.contains('active') ? '#e60000' : 'var(--primary-color)';
+            };
+
+            btn.addEventListener('click', togglePanel);
+            document.getElementById('panel-close').addEventListener('click', togglePanel);
+            
+            document.addEventListener('click', (event) => {
+                if (!panel.contains(event.target) && !btn.contains(event.target) && panel.classList.contains('active')) {
+                    togglePanel();
+                }
+            });
+
+            contrastToggle.addEventListener('click', () => {
+                applyContrast(!body.classList.contains('high-contrast'));
+            });
+
+            spacingToggle.addEventListener('click', () => {
+                applySpacing(!body.classList.contains('readable-spacing'));
+            });
+
+            fontButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    applyFont(fontClasses[button.id]);
+                });
             });
         });
     </script>
